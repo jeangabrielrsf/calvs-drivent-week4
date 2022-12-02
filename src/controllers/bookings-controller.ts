@@ -23,11 +23,19 @@ export async function makeBooking(req: AuthenticatedRequest, res: Response) {
   const { roomId } = req.body;
   try {
     if (!roomId) {
-      return requestError(httpStatus.BAD_REQUEST, "Bad Request Error");
+      return requestError(httpStatus.BAD_REQUEST, "BadRequestError");
     }
     const result = await bookingService.postBooking(roomId, userId);
-    return res.status(httpStatus.OK).send(result);
+
+    return res.status(httpStatus.OK).send({ bookingId: result });
   } catch (error) {
-    return res.sendStatus(httpStatus.FORBIDDEN);
+    if (error.name == "NotFoundError") {
+      return res.sendStatus(httpStatus.NOT_FOUND);
+    }
+    if (error.name == "ForbiddenError") {
+      return res.sendStatus(httpStatus.FORBIDDEN);
+    }
+
+    return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
 }

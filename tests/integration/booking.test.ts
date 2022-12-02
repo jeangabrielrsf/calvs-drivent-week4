@@ -60,7 +60,6 @@ describe("GET /booking", () => {
       const room = await createRoomWithHotelId(hotel.id);
 
       const response = await server.get("/booking").set("Authorization", `Bearer ${token}`);
-      console.log(response.body);
 
       expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
