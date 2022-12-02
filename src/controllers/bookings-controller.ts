@@ -14,6 +14,7 @@ export async function listBookings(req: AuthenticatedRequest, res: Response) {
     if (error.name == "NotFoundError") {
       return res.sendStatus(httpStatus.NOT_FOUND);
     }
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error);
   }
 }
 

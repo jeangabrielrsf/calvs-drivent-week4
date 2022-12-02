@@ -10,7 +10,11 @@ async function getBooking(userId: number) {
   if (!booking) {
     throw notFoundError();
   }
-  return booking;
+  const bookingResponse = {
+    id: booking.id,
+    Room: booking.Room,
+  };
+  return bookingResponse;
 }
 
 async function postBooking(roomId: number, userId: number) {
