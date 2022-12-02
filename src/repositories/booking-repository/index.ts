@@ -19,8 +19,23 @@ async function findBookingByUserId(userId: number) {
   return response;
 }
 
+async function createBooking(userId: number, roomId: number) {
+  const response = await prisma.booking.create({
+    data: {
+      userId,
+      roomId,
+    },
+  });
+  delete response.createdAt;
+  delete response.id;
+  delete response.updatedAt;
+  delete response.userId;
+  return response;
+}
+
 const bookingRepository = {
   findBookingByUserId,
+  createBooking,
 };
 
 export default bookingRepository;

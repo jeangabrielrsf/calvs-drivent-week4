@@ -4,6 +4,9 @@ import { Router } from "express";
 
 const bookingsRouter = Router();
 
-bookingsRouter.all("/*", authenticateToken).get("/", listBookings);
+bookingsRouter
+  .all("/*", authenticateToken)
+  .get("/", listBookings)
+  .post("/", );
 
 export { bookingsRouter };
