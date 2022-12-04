@@ -43,11 +43,6 @@ async function postBooking(roomId: number, userId: number) {
 }
 
 async function putBooking(roomId: number, userId: number, bookingId: number) {
-  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  if (!enrollment) {
-    throw forbiddenError();
-  }
-
   const room = await hotelRepository.findRoom(roomId);
   if (!room) {
     throw notFoundError();

@@ -156,7 +156,19 @@ describe("POST /booking", () => {
       expect(response.status).toBe(httpStatus.FORBIDDEN);
     });
 
-    //falta erro para caso roomId passada nao exista
+    it("should respond with status 401 when roomId is not given", async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const enrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createTicketTypeWithHotel();
+      const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+      const hotel = await createHotel();
+      const room = await createRoomWithHotelId(hotel.id);
+
+      const response = await server.post("/booking").set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    });
 
     it("should respond with status 404 when roomId does not exists", async () => {
       const user = await createUser();
@@ -316,6 +328,21 @@ describe("PUT /booking/:bookingId", () => {
       expect(response.body).toEqual({
         bookingId: booking.id,
       });
+    });
+
+    it("should respond with status 401 when roomId is not given", async () => {
+      const user = await createUser();
+      const enrollment = await createEnrollmentWithAddress(user);
+      const token = await generateValidToken(user);
+      const ticketType = await createTicketTypeWithHotel();
+      const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+      const hotel = await createHotel();
+      const room = await createRoomWithHotelId(hotel.id);
+      const booking = await createBooking(user.id, room.id);
+
+      const response = await server.put(`/booking/${booking.id}`).set("Authorization", `Bearer ${token}`).send({});
+
+      expect(response.status).toBe(httpStatus.BAD_REQUEST);
     });
   });
 });

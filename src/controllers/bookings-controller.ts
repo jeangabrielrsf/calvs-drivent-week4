@@ -20,10 +20,10 @@ export async function listBookings(req: AuthenticatedRequest, res: Response) {
 
 export async function makeBooking(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
-  const { roomId } = req.body;
   try {
+    const { roomId } = req.body;
     if (!roomId) {
-      return requestError(httpStatus.BAD_REQUEST, "BadRequestError");
+      return res.sendStatus(httpStatus.BAD_REQUEST);
     }
 
     if (typeof roomId != "number" || roomId <= 0) {
@@ -47,11 +47,11 @@ export async function makeBooking(req: AuthenticatedRequest, res: Response) {
 
 export async function changeBooking(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
-  const { roomId } = req.body;
-  const { bookingId } = req.params;
   try {
+    const { roomId } = req.body;
+    const { bookingId } = req.params;
     if (!roomId) {
-      return requestError(httpStatus.BAD_REQUEST, "BadRequestError");
+      return res.sendStatus(httpStatus.BAD_REQUEST);
     }
 
     if (typeof roomId != "number" || roomId <= 0) {
@@ -64,6 +64,9 @@ export async function changeBooking(req: AuthenticatedRequest, res: Response) {
   } catch (error) {
     if (error.name == "NotFoundError") {
       return res.status(httpStatus.NOT_FOUND).send(error);
+    }
+    if (error.name == "BadRequestError") {
+      return res.status(httpStatus.BAD_REQUEST).send(error);
     }
     return res.status(httpStatus.FORBIDDEN).send(error);
   }
