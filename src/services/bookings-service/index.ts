@@ -22,12 +22,10 @@ async function postBooking(roomId: number, userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if (!enrollment) {
     throw forbiddenError();
-    // tem que ser forbidden. Fazer depois.
   }
   const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
   if (ticket.TicketType.isRemote || ticket.status != TicketStatus.PAID || ticket.TicketType.includesHotel === false) {
     throw forbiddenError();
-    // tem que ser forbidden. Fazer depois.
   }
   //checar sem roomId existe
   const room = await hotelRepository.findRoom(roomId);

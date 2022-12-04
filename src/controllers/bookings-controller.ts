@@ -25,6 +25,11 @@ export async function makeBooking(req: AuthenticatedRequest, res: Response) {
     if (!roomId) {
       return requestError(httpStatus.BAD_REQUEST, "BadRequestError");
     }
+
+    if (typeof roomId != "number" || roomId <= 0) {
+      return res.sendStatus(httpStatus.FORBIDDEN);
+    }
+
     const result = await bookingService.postBooking(roomId, userId);
 
     return res.status(httpStatus.OK).send({ bookingId: result });
